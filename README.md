@@ -202,7 +202,7 @@ The Cisco ASA enforces strict separation between public internet, DMZ, and inter
 
 For exhaustive interactive terminal sessions, line-by-line commands, and troubleshooting show commands, see:
 - 📖 **[English CLI Execution Logs & Verification Manual](docs/CLI_EXECUTION_AND_VERIFICATION_LOGS.md)**
-- 📖 **[دليل أوامر الـ CLI وسجل التنفيذ الشامل بالعربية](docs/ar/دليل_أوامر_الـCLI_وسجل_التنفيذ.md)**
+- 📖 **[Guida ai Comandi CLI ed Esecuzione dei Log di Verifica (Italiano)](docs/it/Guida_Comandi_CLI_e_Verifica.md)**
 
 ---
 
@@ -254,10 +254,10 @@ All production scripts are ready to copy-paste directly into Cisco device CLIs:
 │   │   ├── 03_core_switch_routing.svg              # Core Switch Inter-VLAN routing verification
 │   │   ├── 04_voip_telephony_call.svg              # Cisco 7960 IP Phone real call simulation
 │   │   └── 05_ping_connectivity_test.svg           # End-to-end ping & web traffic verification
-│   └── ar/                                         # Arabic documentation archive
-│       ├── دليل_أوامر_الـCLI_وسجل_التنفيذ.md      # الدليل الشامل للأوامر المنفذة بالعربية
-│       ├── Packet_Tracer_Step_By_Step_Guide.md     # دليل بناء المشروع خطوة بخطوة
-│       └── Project_Documentation.md                # التوثيق العام للمشروع باللغة العربية
+│   └── it/                                         # Documentazione tecnica in lingua italiana
+│       ├── Guida_Comandi_CLI_e_Verifica.md         # Trascrizione comandi CLI e verifica diagnostica
+│       ├── Guida_Passo_Passo_Packet_Tracer.md      # Manuale di assemblaggio e cablaggio Packet Tracer
+│       └── Documentazione_Progetto.md              # Specifiche architetturali generali e matrice VLAN
 ├── packet-tracer/                                  # Cisco Packet Tracer project files (.pkt)
 │   └── README.md                                   # Instructions on loading and saving .pkt files
 └── topology/                                       # Raw diagram definitions
