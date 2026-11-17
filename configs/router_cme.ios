@@ -1,0 +1,91 @@
+! ==============================================================================
+! Edge Router & VoIP Telephony Gateway (Cisco 2811 / 2911)
+! Role: Inter-VLAN Routing + Multi-Pool DHCP Server + Cisco CME Telephony Service
+! ==============================================================================
+
+enable
+configure terminal
+hostname R1-EDGE-CME
+
+! 1. Bring up physical interface
+interface GigabitEthernet0/0
+ description TRUNK_LINK_TO_ACCESS_SWITCH
+ no shutdown
+exit
+
+! 2. Inter-VLAN Sub-Interfaces (Router-on-a-Stick 802.1Q)
+interface GigabitEthernet0/0.20
+ description ADMIN_AND_STAFF_DATA
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+ no shutdown
+
+interface GigabitEthernet0/0.30
+ description VOIP_VOICE_NETWORK
+ encapsulation dot1Q 30
+ ip address 192.168.30.1 255.255.255.0
+ no shutdown
+
+interface GigabitEthernet0/0.50
+ description DATACENTER_SERVERS
+ encapsulation dot1Q 50
+ ip address 192.168.50.1 255.255.255.0
+ no shutdown
+
+interface GigabitEthernet0/0.60
+ description FACTORY_IOT_AND_SMART_TVS
+ encapsulation dot1Q 60
+ ip address 192.168.60.1 255.255.255.0
+ no shutdown
+
+! 3. DHCP Pools Configuration
+ip dhcp excluded-address 192.168.20.1 192.168.20.10
+ip dhcp excluded-address 192.168.30.1 192.168.30.10
+ip dhcp excluded-address 192.168.60.1 192.168.60.10
+
+! Staff Data Pool
+ip dhcp pool POOL-STAFF-DATA
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 192.168.50.10
+
+! Voice Pool (Option 150 points IP phones to TFTP/CME IP)
+ip dhcp pool POOL-VOIP-VOICE
+ network 192.168.30.0 255.255.255.0
+ default-router 192.168.30.1
+ option 150 ip 192.168.30.1
+
+! Factory Displays Pool
+ip dhcp pool POOL-SMART-TVS
+ network 192.168.60.0 255.255.255.0
+ default-router 192.168.60.1
+ dns-server 8.8.8.8
+
+! 4. Cisco CallManager Express (CME) Telephony Configuration
+telephony-service
+ max-ephones 10
+ max-dn 10
+ ip source-address 192.168.30.1 port 2000
+ auto assign 1 to 10
+ create cnf-files
+exit
+
+! Extension 101: Executive Office
+ephone-dn 1
+ number 101
+ description Admin-Desk
+exit
+
+! Extension 102: Engineering Office
+ephone-dn 2
+ number 102
+ description Support-Desk
+exit
+
+! Extension 103: Factory Production Floor
+ephone-dn 3
+ number 103
+ description Factory-Floor
+exit
+
+do write memory

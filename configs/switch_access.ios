@@ -1,0 +1,80 @@
+! ==============================================================================
+! Access Layer Switch (Cisco Catalyst 2960)
+! Role: VLAN Segmentation + Voice VLAN (PoE) + Trunking to Gateway
+! ==============================================================================
+
+enable
+configure terminal
+hostname SW-ACCESS-01
+
+! 1. Define VLAN Database
+vlan 20
+ name DATA_STAFF
+vlan 30
+ name VOICE_VOIP
+vlan 50
+ name SERVERS_DC
+vlan 60
+ name FACTORY_IOT_TVS
+exit
+
+! 2. Workstation & IP Phone Ports (Single-cable Daisy Chaining)
+! Port Fa0/1: Executive Office (Phone Ext 101 + PC 1)
+interface FastEthernet0/1
+ description DESK_01_PHONE_AND_PC
+ switchport mode access
+ switchport access vlan 20
+ switchport voice vlan 30
+ spanning-tree portfast
+ no shutdown
+
+! Port Fa0/2: Engineering Office (Phone Ext 102 + PC 2)
+interface FastEthernet0/2
+ description DESK_02_PHONE_AND_PC
+ switchport mode access
+ switchport access vlan 20
+ switchport voice vlan 30
+ spanning-tree portfast
+ no shutdown
+
+! Port Fa0/3: Factory Production Floor Phone (Ext 103)
+interface FastEthernet0/3
+ description FACTORY_FLOOR_PHONE
+ switchport mode access
+ switchport access vlan 60
+ switchport voice vlan 30
+ spanning-tree portfast
+ no shutdown
+
+! 3. Factory Smart Display / IoT Port
+interface FastEthernet0/10
+ description FACTORY_DASHBOARD_SMART_TV
+ switchport mode access
+ switchport access vlan 60
+ spanning-tree portfast
+ no shutdown
+
+! 4. On-Premises Server Port
+interface FastEthernet0/15
+ description LOCAL_SERVER_FARM
+ switchport mode access
+ switchport access vlan 50
+ spanning-tree portfast
+ no shutdown
+
+! 5. Wireless Access Point Port
+interface FastEthernet0/20
+ description WIRELESS_ACCESS_POINT
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+
+! 6. Uplink Port to Router
+interface GigabitEthernet0/1
+ description UPLINK_TO_ROUTER_G0_0
+ switchport mode trunk
+ switchport trunk allowed vlan 20,30,50,60
+ no shutdown
+
+do write memory

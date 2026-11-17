@@ -1,0 +1,46 @@
+flowchart TD
+    subgraph WAN ["Internet / External"]
+        ISP["Internet Service Provider"]
+    end
+
+    subgraph Edge ["Perimeter & Routing"]
+        Router["R1-EDGE-CME<br/>Cisco 2811/2911<br/>Inter-VLAN + DHCP + CME PBX"]
+    end
+
+    subgraph Switching ["Access Layer"]
+        Switch["SW-ACCESS-01<br/>Cisco Catalyst 2960<br/>VLANs: 20, 30, 50, 60"]
+    end
+
+    subgraph Office_1 ["Executive Office"]
+        Phone1["IP Phone 7960<br/>Ext: 101<br/>VLAN 30 (Voice)"]
+        PC1["Admin PC<br/>DHCP: 192.168.20.11<br/>VLAN 20 (Data)"]
+    end
+
+    subgraph Office_2 ["Engineering Office"]
+        Phone2["IP Phone 7960<br/>Ext: 102<br/>VLAN 30 (Voice)"]
+        PC2["Support PC<br/>DHCP: 192.168.20.12<br/>VLAN 20 (Data)"]
+    end
+
+    subgraph Factory ["Manufacturing Plant"]
+        Phone3["Factory IP Phone<br/>Ext: 103<br/>VLAN 30 (Voice)"]
+        SmartTV["Smart TV Dashboard<br/>DHCP: 192.168.60.11<br/>VLAN 60 (IoT)"]
+    end
+
+    subgraph DataCenter ["Server Room"]
+        Server["DataCenter Server<br/>Static: 192.168.50.10<br/>VLAN 50"]
+        AP["Access Point<br/>Wireless LAN"]
+    end
+
+    ISP <--> Router
+    Router <-->|"Gig0/0 <--> Gig0/1 (Trunk 802.1Q)"| Switch
+
+    Switch ---|"Fa0/1 (Voice + Data)"| Phone1
+    Phone1 ---|"Daisy-Chain Ethernet"| PC1
+
+    Switch ---|"Fa0/2 (Voice + Data)"| Phone2
+    Phone2 ---|"Daisy-Chain Ethernet"| PC2
+
+    Switch ---|"Fa0/3"| Phone3
+    Switch ---|"Fa0/10"| SmartTV
+    Switch ---|"Fa0/15"| Server
+    Switch ---|"Fa0/20"| AP
