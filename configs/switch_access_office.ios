@@ -1,0 +1,63 @@
+! ==============================================================================
+! Office Access Switch (Cisco Catalyst 2960-24PC-L - PoE Enabled)
+! Role: Corporate Desktops, VoIP Phones, Network Printers, WLC & Access Points
+! ==============================================================================
+
+enable
+configure terminal
+hostname SW-ACCESS-OFFICE
+
+! 1. VLAN Database
+vlan 10
+ name MGMT_INFRASTRUCTURE
+vlan 20
+ name DATA_STAFF
+vlan 25
+ name PRINTERS_PERIPHERALS
+vlan 30
+ name VOICE_VOIP
+vlan 40
+ name CORP_WIFI_WLC
+exit
+
+! 2. Staff Workstations & IP Phones (Daisy-Chain via Voice VLAN)
+interface range FastEthernet0/1 - 10
+ description STAFF_WORKSTATION_AND_IP_PHONE
+ switchport mode access
+ switchport access vlan 20
+ switchport voice vlan 30
+ spanning-tree portfast
+ mls qos trust cos
+ no shutdown
+
+! 3. Shared Departmental Network Printers & Multi-Function Printers (MFP)
+interface range FastEthernet0/11 - 14
+ description NETWORK_PRINTERS_AND_SCANNERS
+ switchport mode access
+ switchport access vlan 25
+ spanning-tree portfast
+ no shutdown
+
+! 4. Wireless LAN Controller (WLC 3504 / 2504) Port
+interface FastEthernet0/20
+ description WIRELESS_LAN_CONTROLLER_MGMT
+ switchport mode access
+ switchport access vlan 40
+ spanning-tree portfast
+ no shutdown
+
+! 5. Lightweight Wireless Access Points (LWAPP / CAPWAP)
+interface range FastEthernet0/21 - 24
+ description POE_ACCESS_POINTS
+ switchport mode trunk
+ switchport trunk allowed vlan 40,99
+ no shutdown
+
+! 6. Uplink to Core Switch
+interface GigabitEthernet0/1
+ description UPLINK_TO_CORE_DIST_SWITCH
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,25,30,40,99
+ no shutdown
+
+do write memory

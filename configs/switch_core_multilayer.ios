@@ -1,0 +1,105 @@
+! ==============================================================================
+! Core / Distribution Multilayer Switch (Cisco Catalyst 3560 / 3650)
+! Role: High-Speed Inter-VLAN Routing, SVI Gateways, Core Trunking & DHCP Helper
+! ==============================================================================
+
+enable
+configure terminal
+hostname CORE-DIST-SW01
+
+! 1. Enable Hardware-based IPv4 Routing
+ip routing
+
+! 2. Create VLAN Database across Enterprise and Factory
+vlan 10
+ name MGMT_INFRASTRUCTURE
+vlan 20
+ name DATA_STAFF
+vlan 25
+ name PRINTERS_PERIPHERALS
+vlan 30
+ name VOICE_VOIP
+vlan 40
+ name CORP_WIFI_WLC
+vlan 50
+ name DATACENTER_SERVERS
+vlan 60
+ name FACTORY_SMART_TVS
+vlan 70
+ name CCTV_SURVEILLANCE
+vlan 80
+ name INDUSTRIAL_OT_PLCS
+vlan 99
+ name GUEST_WIFI
+exit
+
+! 3. Configure Switched Virtual Interfaces (Default Gateways)
+interface Vlan10
+ description GATEWAY_MGMT
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+
+interface Vlan20
+ description GATEWAY_STAFF_DATA
+ ip address 192.168.20.1 255.255.255.0
+ no shutdown
+
+interface Vlan25
+ description GATEWAY_PRINTERS
+ ip address 192.168.25.1 255.255.255.0
+ no shutdown
+
+interface Vlan30
+ description GATEWAY_VOICE_VOIP
+ ip address 192.168.30.1 255.255.255.0
+ no shutdown
+
+interface Vlan40
+ description GATEWAY_CORP_WIFI
+ ip address 192.168.40.1 255.255.255.0
+ no shutdown
+
+interface Vlan50
+ description GATEWAY_SERVERS_DC
+ ip address 192.168.50.1 255.255.255.0
+ no shutdown
+
+interface Vlan60
+ description GATEWAY_FACTORY_SMART_TVS
+ ip address 192.168.60.1 255.255.255.0
+ no shutdown
+
+interface Vlan70
+ description GATEWAY_CCTV_CAMERAS
+ ip address 192.168.70.1 255.255.255.0
+ no shutdown
+
+interface Vlan80
+ description GATEWAY_INDUSTRIAL_OT_PLCS
+ ip address 192.168.80.1 255.255.255.0
+ no shutdown
+
+interface Vlan99
+ description GATEWAY_GUEST_WIFI
+ ip address 192.168.99.1 255.255.255.0
+ no shutdown
+
+! 4. Point-to-Point Routed Link to Firewall (Inside Interface)
+interface GigabitEthernet0/1
+ description ROUTED_UPLINK_TO_ASA_FIREWALL
+ no switchport
+ ip address 10.0.0.2 255.255.255.252
+ no shutdown
+
+! Default Route to Firewall
+ip route 0.0.0.0 0.0.0.0 10.0.0.1
+
+! 5. 802.1Q Trunk Downlinks to Access Switches
+interface range GigabitEthernet0/2 - 4
+ description 802.1Q_TRUNK_TO_ACCESS_SWITCHES
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,25,30,40,50,60,70,80,99
+ no shutdown
+
+do write memory

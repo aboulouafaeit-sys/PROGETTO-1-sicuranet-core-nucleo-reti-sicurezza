@@ -1,46 +1,66 @@
 flowchart TD
-    subgraph WAN ["Internet / External"]
-        ISP["Internet Service Provider"]
+    subgraph WAN ["🌐 Internet & External World"]
+        ISP["Internet Service Provider (ISP)"]
     end
 
-    subgraph Edge ["Perimeter & Routing"]
-        Router["R1-EDGE-CME<br/>Cisco 2811/2911<br/>Inter-VLAN + DHCP + CME PBX"]
+    subgraph Perimeter ["🛡️ Perimeter Security Layer"]
+        Firewall["<b>Cisco ASA 5506-X Firewall</b><br/>• Outside (Sec 0)<br/>• Inside (Sec 100)<br/>• DMZ (Sec 50)"]
     end
 
-    subgraph Switching ["Access Layer"]
-        Switch["SW-ACCESS-01<br/>Cisco Catalyst 2960<br/>VLANs: 20, 30, 50, 60"]
+    subgraph DMZ_Zone ["🔒 Demilitarized Zone (DMZ - VLAN 90)"]
+        DMZ_Server["<b>Public Web / Portal Server</b><br/>IP: 172.16.90.10"]
     end
 
-    subgraph Office_1 ["Executive Office"]
-        Phone1["IP Phone 7960<br/>Ext: 101<br/>VLAN 30 (Voice)"]
-        PC1["Admin PC<br/>DHCP: 192.168.20.11<br/>VLAN 20 (Data)"]
+    subgraph Core_Layer ["⚡ Core & Distribution Layer"]
+        CoreSwitch["<b>Core Switch 3650 / 3560</b><br/>• Hardware Inter-VLAN Routing<br/>• 10Gbps Fiber Aggregation"]
     end
 
-    subgraph Office_2 ["Engineering Office"]
-        Phone2["IP Phone 7960<br/>Ext: 102<br/>VLAN 30 (Voice)"]
-        PC2["Support PC<br/>DHCP: 192.168.20.12<br/>VLAN 20 (Data)"]
+    subgraph Server_Farm ["🏢 Enterprise Data Center (VLAN 50)"]
+        DC_AD["<b>Active Directory / DNS</b><br/>192.168.50.10"]
+        DC_ERP["<b>ERP & Database Server</b><br/>192.168.50.20"]
+        DC_NVR["<b>CCTV NVR Storage Server</b><br/>192.168.50.50"]
     end
 
-    subgraph Factory ["Manufacturing Plant"]
-        Phone3["Factory IP Phone<br/>Ext: 103<br/>VLAN 30 (Voice)"]
-        SmartTV["Smart TV Dashboard<br/>DHCP: 192.168.60.11<br/>VLAN 60 (IoT)"]
+    subgraph Office_Building ["💼 Corporate Office Building"]
+        SW_Office["<b>Office PoE Switch 2960</b><br/>VLANs: 10, 20, 25, 30, 40"]
+        Phone1["<b>IP Phone 7960</b><br/>Ext: <b>101</b> (VLAN 30)"]
+        PC1["<b>Staff PC</b><br/>192.168.20.11 (VLAN 20)"]
+        Printer["<b>Network Laser Printer</b><br/>192.168.25.11 (VLAN 25)"]
+        WLC["<b>Wireless Controller (WLC)</b><br/>Central WLAN Mgmt"]
+        AP1["<b>Office Wi-Fi 6 AP</b><br/>SSID: Corp-Secure"]
     end
 
-    subgraph DataCenter ["Server Room"]
-        Server["DataCenter Server<br/>Static: 192.168.50.10<br/>VLAN 50"]
-        AP["Access Point<br/>Wireless LAN"]
+    subgraph Factory_Plant ["🏭 Smart Manufacturing Plant Floor"]
+        SW_Factory["<b>Industrial PoE Switch IE-2000 / 2960</b><br/>VLANs: 10, 30, 60, 70, 80"]
+        Phone_Factory["<b>Ruggedized IP Phone</b><br/>Ext: <b>103</b> (VLAN 30)"]
+        SmartTV["<b>Production Smart TV</b><br/>192.168.60.11 (OEE Dashboard)"]
+        Cam1["<b>HD IP Camera 01</b><br/>192.168.70.11 (CCTV PoE)"]
+        Cam2["<b>HD IP Camera 02</b><br/>192.168.70.12 (CCTV PoE)"]
+        IoT_Door["<b>RFID Biometric Turnstile</b><br/>192.168.80.11 (Access Control)"]
+        IoT_PLC["<b>Industrial PLC & Sensors</b><br/>192.168.80.20 (SCADA Telemetry)"]
+        AP2["<b>Industrial Outdoor AP</b><br/>SSID: Factory-Industrial"]
     end
 
-    ISP <--> Router
-    Router <-->|"Gig0/0 <--> Gig0/1 (Trunk 802.1Q)"| Switch
+    ISP <-->|"WAN Uplink"| Firewall
+    Firewall <-->|"DMZ Link (Gig1/3)"| DMZ_Server
+    Firewall <-->|"Routed Inside (10.0.0.1 ↔ 10.0.0.2)"| CoreSwitch
 
-    Switch ---|"Fa0/1 (Voice + Data)"| Phone1
-    Phone1 ---|"Daisy-Chain Ethernet"| PC1
+    CoreSwitch <-->|"Trunk Uplink (802.1Q)"| SW_Office
+    CoreSwitch <-->|"Trunk Uplink (802.1Q)"| SW_Factory
+    CoreSwitch --- DC_AD
+    CoreSwitch --- DC_ERP
+    CoreSwitch --- DC_NVR
 
-    Switch ---|"Fa0/2 (Voice + Data)"| Phone2
-    Phone2 ---|"Daisy-Chain Ethernet"| PC2
+    SW_Office ---|"Fa0/1 (Voice VLAN 30)"| Phone1
+    Phone1 ---|"Single-Cable Passthrough"| PC1
+    SW_Office ---|"Fa0/11 (VLAN 25)"| Printer
+    SW_Office ---|"Fa0/20 (VLAN 40)"| WLC
+    SW_Office ---|"Fa0/21 (Trunk)"| AP1
 
-    Switch ---|"Fa0/3"| Phone3
-    Switch ---|"Fa0/10"| SmartTV
-    Switch ---|"Fa0/15"| Server
-    Switch ---|"Fa0/20"| AP
+    SW_Factory ---|"Fa0/1 (Voice VLAN 30)"| Phone_Factory
+    SW_Factory ---|"Fa0/5 (VLAN 60)"| SmartTV
+    SW_Factory ---|"Fa0/9 (VLAN 70)"| Cam1
+    SW_Factory ---|"Fa0/10 (VLAN 70)"| Cam2
+    SW_Factory ---|"Fa0/17 (VLAN 80)"| IoT_Door
+    SW_Factory ---|"Fa0/18 (VLAN 80)"| IoT_PLC
+    SW_Factory ---|"Fa0/21 (Trunk)"| AP2

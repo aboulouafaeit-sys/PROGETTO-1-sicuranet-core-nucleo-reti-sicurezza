@@ -1,0 +1,63 @@
+! ==============================================================================
+! Industrial Factory Access Switch (Cisco IE-2000 / Catalyst 2960 PoE)
+! Role: CCTV IP Cameras, Smart TV Dashboards, Industrial IoT Sensors, Door Access
+! ==============================================================================
+
+enable
+configure terminal
+hostname SW-ACCESS-FACTORY
+
+! 1. VLAN Database
+vlan 10
+ name MGMT_INFRASTRUCTURE
+vlan 30
+ name VOICE_VOIP
+vlan 60
+ name FACTORY_SMART_TVS
+vlan 70
+ name CCTV_SURVEILLANCE
+vlan 80
+ name INDUSTRIAL_OT_PLCS
+exit
+
+! 2. Factory Floor IP Phones (Ruggedized VoIP Terminals)
+interface range FastEthernet0/1 - 4
+ description FACTORY_FLOOR_VOIP_PHONES
+ switchport mode access
+ switchport access vlan 60
+ switchport voice vlan 30
+ spanning-tree portfast
+ no shutdown
+
+! 3. Real-Time Production Smart TV Monitors / Overhead Dashboards
+interface range FastEthernet0/5 - 8
+ description PRODUCTION_LINE_SMART_TVS
+ switchport mode access
+ switchport access vlan 60
+ spanning-tree portfast
+ no shutdown
+
+! 4. High-Definition CCTV Surveillance IP Cameras (PoE Powered)
+interface range FastEthernet0/9 - 16
+ description HD_CCTV_SURVEILLANCE_CAMERAS
+ switchport mode access
+ switchport access vlan 70
+ spanning-tree portfast
+ no shutdown
+
+! 5. Industrial IoT, Environmental Sensors & RFID Biometric Door Access
+interface range FastEthernet0/17 - 24
+ description INDUSTRIAL_OT_SENSORS_AND_ACCESS_CONTROL
+ switchport mode access
+ switchport access vlan 80
+ spanning-tree portfast
+ no shutdown
+
+! 6. Uplink to Core Switch
+interface GigabitEthernet0/1
+ description UPLINK_TO_CORE_DIST_SWITCH
+ switchport mode trunk
+ switchport trunk allowed vlan 10,30,60,70,80
+ no shutdown
+
+do write memory
