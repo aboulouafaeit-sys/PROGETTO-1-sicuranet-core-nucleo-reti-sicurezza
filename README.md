@@ -8,13 +8,14 @@
 [![Surveillance](https://img.shields.io/badge/CCTV-HD_IP_Cameras_%26_NVR-blue?style=flat)]()
 [![Industrial IoT](https://img.shields.io/badge/Industry_4.0-OT_%26_Smart_Displays-purple?style=flat)]()
 
-An enterprise campus network architecture integrating commercial office operations and industrial manufacturing under a unified, secure infrastructure. Designed according to Cisco CCNA and Enterprise standards, this project incorporates **Perimeter Next-Gen Firewall Security (Cisco ASA)**, **CCTV IP Surveillance with NVR Storage**, **Industrial IoT / OT Automation**, **Voice/Data Convergence via Cisco CallManager Express (CME)**, **Shared Network Printing**, and **Centralized Wireless Controller (WLC)** management.
+An enterprise campus network architecture integrating commercial office operations and industrial manufacturing under a unified, secure infrastructure. Designed according to Cisco CCNA and Enterprise standards, this project incorporates **Perimeter Next-Gen Firewall Security (Cisco ASA 5506-X)**, **CCTV IP Surveillance with NVR Storage**, **Industrial IoT / OT Automation**, **Voice/Data Convergence via Cisco CallManager Express (CME)**, **Shared Network Printing**, and **Centralized Wireless Controller (WLC)** management.
 
 ---
 
 ## 📑 Table of Contents
 - [Executive Summary](#-executive-summary)
 - [Enterprise Network Topology](#-enterprise-network-topology)
+- [Visual Lab Demonstrations & Verification Screenshots](#-visual-lab-demonstrations--verification-screenshots)
 - [Connected Hardware & Systems](#-connected-hardware--systems)
 - [Master VLAN & Subnet Matrix](#-master-vlan--subnet-matrix)
 - [Subsystems & Innovations](#-subsystems--innovations)
@@ -23,7 +24,8 @@ An enterprise campus network architecture integrating commercial office operatio
   - [3. Industrial IoT, Dashboards & Access Control](#3-industrial-iot-dashboards--access-control)
   - [4. VoIP Telephony & CME PBX](#4-voip-telephony--cme-pbx)
   - [5. Network Printing & Centralized Wi-Fi](#5-network-printing--centralized-wi-fi)
-- [Cisco IOS / ASA Configuration Files](#-cisco-ios--asa-configuration-files)
+- [Cisco CLI Commands & Execution Logs](#-cisco-cli-commands--execution-logs)
+- [Cisco IOS / ASA Configuration Scripts](#-cisco-ios--asa-configuration-scripts)
 - [Quick Start Packet Tracer Guide](#-quick-start-packet-tracer-guide)
 - [Repository Structure](#-repository-structure)
 
@@ -39,6 +41,8 @@ Modern enterprise and industrial facilities demand stringent network segmentatio
 ---
 
 ## 🗺️ Enterprise Network Topology
+
+![Production Network Architecture Topology](docs/screenshots/01_topology_overview.svg)
 
 ```mermaid
 flowchart TD
@@ -105,6 +109,32 @@ flowchart TD
 
 ---
 
+## 📸 Visual Lab Demonstrations & Verification Screenshots
+
+### 1. Cisco ASA 5506-X Security Zones, ACLs & PAT Verification
+Inspection of interface security levels (`outside=0`, `inside=100`, `dmz=50`), active hit counters on DMZ access lists, and live translations under Dynamic PAT:
+![Cisco ASA Firewall Verification](docs/screenshots/02_asa_firewall_cli.svg)
+
+---
+
+### 2. Core Multilayer Switch (L3 Routing & 802.1Q Trunks)
+Routing table verification showing hardware SVIs across all 10 corporate and industrial VLANs with the default route pointing to the ASA Firewall:
+![Core Switch Routing Verification](docs/screenshots/03_core_switch_routing.svg)
+
+---
+
+### 3. Cisco CME IP Telephony & Active VoIP Call Simulation
+Packet Tracer simulation showing live two-way calling between **Phone 101 (Office)** and **Phone 103 (Factory Floor)**, alongside real-time CME registration outputs:
+![VoIP CME Call Verification](docs/screenshots/04_voip_telephony_call.svg)
+
+---
+
+### 4. End-to-End Inter-VLAN, DMZ & Internet Connectivity
+Console test run from `PC-Admin` (`192.168.20.11`) verifying wire-speed routing to the NVR server, DMZ HTTP web requests, and outbound PAT access:
+![End to End Ping Verification](docs/screenshots/05_ping_connectivity_test.svg)
+
+---
+
 ## 📦 Connected Hardware & Systems
 
 | Device Category | Equipment Model | Role & Connected Function |
@@ -168,9 +198,17 @@ The Cisco ASA enforces strict separation between public internet, DMZ, and inter
 
 ---
 
-## 💻 Cisco IOS / ASA Configuration Files
+## 💻 Cisco CLI Commands & Execution Logs
 
-All production scripts are ready to copy-paste into Cisco devices:
+For exhaustive interactive terminal sessions, line-by-line commands, and troubleshooting show commands, see:
+- 📖 **[English CLI Execution Logs & Verification Manual](docs/CLI_EXECUTION_AND_VERIFICATION_LOGS.md)**
+- 📖 **[دليل أوامر الـ CLI وسجل التنفيذ الشامل بالعربية](docs/ar/دليل_أوامر_الـCLI_وسجل_التنفيذ.md)**
+
+---
+
+## 📜 Cisco IOS / ASA Configuration Scripts
+
+All production scripts are ready to copy-paste directly into Cisco device CLIs:
 
 | Configuration Script | Target Device | Key Technologies Configured |
 | :--- | :--- | :--- |
@@ -185,7 +223,7 @@ All production scripts are ready to copy-paste into Cisco devices:
 ## 🚀 Quick Start Packet Tracer Guide
 
 1. **Step-by-Step Build Manual:** Follow [`docs/PACKET_TRACER_LAB.md`](docs/PACKET_TRACER_LAB.md) for full physical cabling and device placement.
-2. **Detailed Architecture Notes:** Read [`docs/ENTERPRISE_ARCHITECTURE.md`](docs/ENTERPRISE_ARCHITECTURE.md) for design justifications and security flow.
+2. **Interactive CLI Guide:** Review [`docs/CLI_EXECUTION_AND_VERIFICATION_LOGS.md`](docs/CLI_EXECUTION_AND_VERIFICATION_LOGS.md) to follow the exact commands executed.
 3. **Power On Endpoints:** Attach power adapters to the Cisco 7960 IP Phones via their **Physical** tab.
 4. **Deploy Configurations:** Paste the corresponding `.ios` and `.cfg` files from the `configs/` folder into each device's CLI.
 5. **Verify:** Dial `103` from Phone `101`, ping the NVR from the IP Cameras, and confirm that the Smart TV receives a lease from DHCP scope `192.168.60.0/24`.
@@ -196,22 +234,34 @@ All production scripts are ready to copy-paste into Cisco devices:
 
 ```
 .
-├── .gitignore                          # Standard ignore patterns for OS & Packet Tracer files
-├── README.md                           # Main architectural showcase & comprehensive portfolio
-├── CONTRIBUTING.md                     # Open-source contribution guidelines
-├── configs/                            # Ready-to-deploy Cisco IOS & ASA configuration scripts
-│   ├── firewall_asa.cfg                # Cisco ASA 5506-X: Perimeter, DMZ, Outside & PAT
-│   ├── switch_core_multilayer.ios      # Core Switch: SVIs, Inter-VLAN, Routed Uplink
-│   ├── switch_access_office.ios        # Office Switch: Voice VLAN, PC, Printers, WLC
-│   ├── switch_access_factory.ios       # Factory Switch: Smart TVs, CCTV Cameras, Sensors
-│   └── router_cme.ios                  # Edge Router: Cisco CallManager Express (CME) PBX
-├── docs/                               # In-depth technical documentation
-│   ├── ENTERPRISE_ARCHITECTURE.md      # Detailed engineering specification
-│   ├── PACKET_TRACER_LAB.md            # Complete step-by-step assembly manual
-│   ├── SUBNETTING_AND_VLANS.md         # Full 10-VLAN IP matrix and DHCP scopes
-│   └── ar/                             # Arabic documentation archive
-└── topology/                           # Visual diagram assets
-    └── network_topology.mermaid        # Raw Mermaid topology diagram source
+├── .gitignore                                      # Ignore patterns for OS & temporary files
+├── README.md                                       # Main architectural showcase & portfolio
+├── CONTRIBUTING.md                                 # Open-source contribution guidelines
+├── configs/                                        # Ready-to-deploy Cisco IOS & ASA configuration scripts
+│   ├── firewall_asa.cfg                            # Cisco ASA 5506-X: Perimeter, DMZ, Outside & PAT
+│   ├── switch_core_multilayer.ios                  # Core Switch: SVIs, Inter-VLAN, Routed Uplink
+│   ├── switch_access_office.ios                    # Office Switch: Voice VLAN, PC, Printers, WLC
+│   ├── switch_access_factory.ios                   # Factory Switch: Smart TVs, CCTV Cameras, Sensors
+│   └── router_cme.ios                              # Edge Router: Cisco CallManager Express (CME) PBX
+├── docs/                                           # In-depth technical documentation & manuals
+│   ├── CLI_EXECUTION_AND_VERIFICATION_LOGS.md      # Full interactive command execution manual & outputs
+│   ├── ENTERPRISE_ARCHITECTURE.md                  # Detailed engineering design specification
+│   ├── PACKET_TRACER_LAB.md                        # Complete step-by-step assembly manual
+│   ├── SUBNETTING_AND_VLANS.md                     # Full 10-VLAN IP matrix and DHCP scopes
+│   ├── screenshots/                                # High-resolution visual diagrams & CLI captures
+│   │   ├── 01_topology_overview.svg                # Full production topology diagram
+│   │   ├── 02_asa_firewall_cli.svg                 # Cisco ASA CLI & security zones verification
+│   │   ├── 03_core_switch_routing.svg              # Core Switch Inter-VLAN routing verification
+│   │   ├── 04_voip_telephony_call.svg              # Cisco 7960 IP Phone real call simulation
+│   │   └── 05_ping_connectivity_test.svg           # End-to-end ping & web traffic verification
+│   └── ar/                                         # Arabic documentation archive
+│       ├── دليل_أوامر_الـCLI_وسجل_التنفيذ.md      # الدليل الشامل للأوامر المنفذة بالعربية
+│       ├── Packet_Tracer_Step_By_Step_Guide.md     # دليل بناء المشروع خطوة بخطوة
+│       └── Project_Documentation.md                # التوثيق العام للمشروع باللغة العربية
+├── packet-tracer/                                  # Cisco Packet Tracer project files (.pkt)
+│   └── README.md                                   # Instructions on loading and saving .pkt files
+└── topology/                                       # Raw diagram definitions
+    └── network_topology.mermaid                    # Mermaid topology source
 ```
 
 ---

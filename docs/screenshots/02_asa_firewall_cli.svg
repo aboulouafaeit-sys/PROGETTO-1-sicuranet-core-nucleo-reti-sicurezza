@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Terminal Window Background -->
+  <rect width="900" height="520" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="2" filter="url(#shadow)"/>
+
+  <!-- Window Header / Title Bar -->
+  <path d="M 0 12 Q 0 0 12 0 L 888 0 Q 900 0 900 12 L 900 40 L 0 40 Z" fill="#161b22"/>
+  <circle cx="24" cy="20" r="6" fill="#ff5f56"/>
+  <circle cx="44" cy="20" r="6" fill="#ffbd2e"/>
+  <circle cx="64" cy="20" r="6" fill="#27c93f"/>
+  <text x="450" y="25" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#8b949e" text-anchor="middle">
+    ciscoasa - ASA-FIREWALL-01 (Console Session - Cisco ASA 5506-X)
+  </text>
+
+  <!-- Terminal Content -->
+  <g font-family="'Cascadia Code', Consolas, 'Courier New', monospace" font-size="12.5" xml:space="preserve">
+    <!-- Command 1: show nameif -->
+    <text x="25" y="70" fill="#38bdf8" font-weight="bold">ASA-FIREWALL-01# </text>
+    <text x="170" y="70" fill="#f0f6fc">show nameif</text>
+    
+    <text x="25" y="92" fill="#8b949e">Interface                Name                     Security</text>
+    <text x="25" y="112" fill="#58a6ff">GigabitEthernet1/1       outside                     0</text>
+    <text x="25" y="132" fill="#3fb950">GigabitEthernet1/2       inside                    100</text>
+    <text x="25" y="152" fill="#e3b341">GigabitEthernet1/3       dmz                        50</text>
+
+    <!-- Command 2: show access-list -->
+    <text x="25" y="185" fill="#38bdf8" font-weight="bold">ASA-FIREWALL-01# </text>
+    <text x="170" y="185" fill="#f0f6fc">show access-list ACL_OUTSIDE_IN</text>
+    
+    <text x="25" y="207" fill="#8b949e">access-list ACL_OUTSIDE_IN; 3 elements; name hash: 0x47fa9b12</text>
+    <text x="25" y="227" fill="#f0f6fc">access-list ACL_OUTSIDE_IN line 1 extended permit tcp any host 172.16.90.10 eq www <tspan fill="#3fb950">(hitcnt=248)</tspan></text>
+    <text x="25" y="247" fill="#f0f6fc">access-list ACL_OUTSIDE_IN line 2 extended permit tcp any host 172.16.90.10 eq 443 <tspan fill="#3fb950">(hitcnt=1420)</tspan></text>
+    <text x="25" y="267" fill="#f0f6fc">access-list ACL_OUTSIDE_IN line 3 extended permit icmp any any echo-reply <tspan fill="#3fb950">(hitcnt=16)</tspan></text>
+
+    <!-- Command 3: show nat / xlate -->
+    <text x="25" y="300" fill="#38bdf8" font-weight="bold">ASA-FIREWALL-01# </text>
+    <text x="170" y="300" fill="#f0f6fc">show nat</text>
+    
+    <text x="25" y="322" fill="#8b949e">Manual NAT Policies (Section 1)</text>
+    <text x="25" y="340" fill="#8b949e">Auto NAT Policies (Section 2)</text>
+    <text x="25" y="360" fill="#f0f6fc">1 (inside) to (outside) source dynamic OBJ_INTERNAL_CORP interface</text>
+    <text x="25" y="378" fill="#7ee787">    translate_hits = 3120, untranslate_hits = 2954</text>
+
+    <!-- Command 4: show xlate -->
+    <text x="25" y="410" fill="#38bdf8" font-weight="bold">ASA-FIREWALL-01# </text>
+    <text x="170" y="410" fill="#f0f6fc">show xlate</text>
+    
+    <text x="25" y="432" fill="#8b949e">2 in use, 14 most used</text>
+    <text x="25" y="452" fill="#f0f6fc">Flags: D - DNS, e - extended, I - inbound, N - net-to-net, s - static, v - VPN</text>
+    <text x="25" y="472" fill="#58a6ff">TCP PAT from inside:192.168.20.11/51234 to outside:203.0.113.2/51234 flags e idle 0:00:04</text>
+    <text x="25" y="492" fill="#58a6ff">TCP PAT from inside:192.168.20.12/49821 to outside:203.0.113.2/49821 flags e idle 0:00:12</text>
+  </g>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="100%" height="100%">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="520" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="2" filter="url(#shadow)"/>
+
+  <!-- Title Bar -->
+  <path d="M 0 12 Q 0 0 12 0 L 888 0 Q 900 0 900 12 L 900 40 L 0 40 Z" fill="#161b22"/>
+  <circle cx="24" cy="20" r="6" fill="#ff5f56"/>
+  <circle cx="44" cy="20" r="6" fill="#ffbd2e"/>
+  <circle cx="64" cy="20" r="6" fill="#27c93f"/>
+  <text x="450" y="25" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#8b949e" text-anchor="middle">
+    PC-Admin (192.168.20.11) - End-to-End Inter-VLAN, DMZ &amp; Firewall NAT Verification
+  </text>
+
+  <!-- Content -->
+  <g font-family="'Cascadia Code', Consolas, 'Courier New', monospace" font-size="12" xml:space="preserve">
+    <!-- Test 1: Ping Gateway -->
+    <text x="25" y="68" fill="#38bdf8" font-weight="bold">C:\Users\Admin&gt; </text>
+    <text x="165" y="68" fill="#f0f6fc">ping 192.168.20.1</text>
+    <text x="25" y="88" fill="#8b949e">Pinging 192.168.20.1 (VLAN 20 Gateway) with 32 bytes of data:</text>
+    <text x="25" y="106" fill="#3fb950">Reply from 192.168.20.1: bytes=32 time&lt;1ms TTL=255</text>
+    <text x="25" y="124" fill="#3fb950">Reply from 192.168.20.1: bytes=32 time&lt;1ms TTL=255</text>
+    <text x="25" y="142" fill="#7ee787">Ping statistics: Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)</text>
+
+    <!-- Test 2: Ping Data Center NVR / AD Server across Core Switch -->
+    <text x="25" y="175" fill="#38bdf8" font-weight="bold">C:\Users\Admin&gt; </text>
+    <text x="165" y="175" fill="#f0f6fc">ping 192.168.50.50</text>
+    <text x="25" y="195" fill="#8b949e">Pinging 192.168.50.50 (Data Center NVR CCTV Server):</text>
+    <text x="25" y="213" fill="#3fb950">Reply from 192.168.50.50: bytes=32 time=1ms TTL=127</text>
+    <text x="25" y="231" fill="#3fb950">Reply from 192.168.50.50: bytes=32 time=1ms TTL=127</text>
+    <text x="25" y="249" fill="#7ee787">Ping statistics: Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)</text>
+
+    <!-- Test 3: Ping DMZ Web Server through ASA Firewall -->
+    <text x="25" y="282" fill="#38bdf8" font-weight="bold">C:\Users\Admin&gt; </text>
+    <text x="165" y="282" fill="#f0f6fc">ping 172.16.90.10</text>
+    <text x="25" y="302" fill="#8b949e">Pinging 172.16.90.10 (DMZ Public Web Server through ASA Firewall):</text>
+    <text x="25" y="320" fill="#3fb950">Reply from 172.16.90.10: bytes=32 time=2ms TTL=126</text>
+    <text x="25" y="338" fill="#3fb950">Reply from 172.16.90.10: bytes=32 time=2ms TTL=126</text>
+    <text x="25" y="356" fill="#7ee787">Ping statistics: Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)</text>
+
+    <!-- Test 4: HTTP Request to DMZ Web Server -->
+    <text x="25" y="390" fill="#38bdf8" font-weight="bold">C:\Users\Admin&gt; </text>
+    <text x="165" y="390" fill="#f0f6fc">curl -I http://172.16.90.10</text>
+    <text x="25" y="412" fill="#79c0ff">HTTP/1.1 200 OK</text>
+    <text x="25" y="430" fill="#8b949e">Server: Apache/2.4.52 (Enterprise-DMZ)</text>
+    <text x="25" y="448" fill="#8b949e">Content-Type: text/html; charset=UTF-8</text>
+    <text x="25" y="466" fill="#3fb950">X-Security-Firewall: Cisco-ASA-5506-X (Inspected)</text>
+
+    <!-- Test 5: Outbound Internet Connectivity -->
+    <text x="25" y="495" fill="#38bdf8" font-weight="bold">C:\Users\Admin&gt; </text>
+    <text x="165" y="495" fill="#f0f6fc">tracert -d 8.8.8.8</text>
+    <text x="350" y="495" fill="#7ee787">1: 192.168.20.1  2: 10.0.0.1 (ASA Inside)  3: 203.0.113.1 (ISP)</text>
+  </g>
+</svg>

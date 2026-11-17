@@ -1,0 +1,197 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="asaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+    <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="officeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="factoryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="620" fill="url(#bg)"/>
+  
+  <!-- Subtle Grid Pattern -->
+  <g stroke="#1e293b" stroke-width="1" opacity="0.3">
+    <path d="M0 60 H960 M0 120 H960 M0 180 H960 M0 240 H960 M0 300 H960 M0 360 H960 M0 420 H960 M0 480 H960 M0 540 H960" />
+    <path d="M80 0 V620 M160 0 V620 M240 0 V620 M320 0 V620 M400 0 V620 M480 0 V620 M560 0 V620 M640 0 V620 M720 0 V620 M800 0 V620 M880 0 V620" />
+  </g>
+
+  <!-- Title Banner -->
+  <rect x="20" y="16" width="920" height="52" rx="8" fill="#1e293b" stroke="#334155" filter="url(#shadow)"/>
+  <text x="40" y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="bold" fill="#38bdf8">
+    🌐 Production Network Architecture Topology | Cisco Enterprise &amp; Smart Factory
+  </text>
+  <rect x="790" y="28" width="130" height="28" rx="6" fill="#0369a1"/>
+  <text x="810" y="46" font-family="monospace" font-size="12" font-weight="bold" fill="#f0f9ff">PACKET TRACER</text>
+
+  <!-- ================= TOPOLOGY CONNECTING LINES ================= -->
+  <!-- ISP to ASA -->
+  <line x1="200" y1="125" x2="350" y2="125" stroke="#64748b" stroke-width="3" stroke-dasharray="6,4"/>
+  <!-- ASA to DMZ -->
+  <line x1="430" y1="155" x2="430" y2="210" stroke="#f43f5e" stroke-width="3"/>
+  <!-- ASA to Core -->
+  <line x1="480" y1="125" x2="650" y2="125" stroke="#38bdf8" stroke-width="3"/>
+  <!-- Core to DataCenter -->
+  <line x1="720" y1="155" x2="720" y2="210" stroke="#a855f7" stroke-width="3"/>
+  <!-- Core to Office Switch -->
+  <path d="M 660 155 L 660 300 L 260 300 L 260 330" fill="none" stroke="#10b981" stroke-width="3"/>
+  <!-- Core to Factory Switch -->
+  <path d="M 720 155 L 720 300 L 700 300 L 700 330" fill="none" stroke="#f59e0b" stroke-width="3"/>
+
+  <!-- ================= ZONE 1: PERIMETER ================= -->
+  <!-- ISP Cloud -->
+  <g transform="translate(60, 95)" filter="url(#shadow)">
+    <rect width="140" height="60" rx="10" fill="#334155" stroke="#475569" stroke-width="2"/>
+    <text x="70" y="32" font-family="sans-serif" font-size="14" font-weight="bold" fill="#f8fafc" text-anchor="middle">☁️ ISP Cloud</text>
+    <text x="70" y="49" font-family="monospace" font-size="10" fill="#94a3b8" text-anchor="middle">Public Internet</text>
+  </g>
+
+  <!-- Cisco ASA 5506-X -->
+  <g transform="translate(320, 85)" filter="url(#shadow)">
+    <rect width="180" height="78" rx="10" fill="url(#asaGrad)" stroke="#ef4444" stroke-width="2"/>
+    <text x="90" y="28" font-family="sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">🛡️ Cisco ASA 5506-X</text>
+    <text x="90" y="45" font-family="monospace" font-size="10" fill="#fecaca" text-anchor="middle">Outside (G1/1) | DMZ (G1/3)</text>
+    <text x="90" y="62" font-family="monospace" font-size="10" fill="#fecaca" text-anchor="middle">Inside: 10.0.0.1/30 (G1/2)</text>
+  </g>
+
+  <!-- DMZ Web Server -->
+  <g transform="translate(350, 210)" filter="url(#shadow)">
+    <rect width="160" height="65" rx="8" fill="#1e293b" stroke="#f43f5e" stroke-width="2"/>
+    <text x="80" y="26" font-family="sans-serif" font-size="12" font-weight="bold" fill="#fda4af" text-anchor="middle">🖥️ DMZ Web Server</text>
+    <text x="80" y="44" font-family="monospace" font-size="10" fill="#cbd5e1" text-anchor="middle">172.16.90.10 (VLAN 90)</text>
+    <text x="80" y="58" font-family="sans-serif" font-size="9" fill="#94a3b8" text-anchor="middle">HTTP / HTTPS (Port 80/443)</text>
+  </g>
+
+  <!-- ================= ZONE 2: CORE SWITCH ================= -->
+  <g transform="translate(610, 85)" filter="url(#shadow)">
+    <rect width="210" height="82" rx="10" fill="url(#coreGrad)" stroke="#60a5fa" stroke-width="2"/>
+    <text x="105" y="26" font-family="sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">⚡ Catalyst 3560 / 3650</text>
+    <text x="105" y="43" font-family="sans-serif" font-size="11" fill="#bfdbfe" text-anchor="middle">Core Inter-VLAN Routing</text>
+    <text x="105" y="58" font-family="monospace" font-size="10" fill="#93c5fd" text-anchor="middle">Routed Uplink: 10.0.0.2/30</text>
+    <text x="105" y="73" font-family="monospace" font-size="9" fill="#dbeafe" text-anchor="middle">SVIs: VLAN 10-99 Gateways</text>
+  </g>
+
+  <!-- Data Center Rack -->
+  <g transform="translate(635, 210)" filter="url(#shadow)">
+    <rect width="180" height="68" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="2"/>
+    <text x="90" y="22" font-family="sans-serif" font-size="11" font-weight="bold" fill="#d8b4fe" text-anchor="middle">🗄️ Enterprise Data Center</text>
+    <text x="90" y="38" font-family="monospace" font-size="9" fill="#cbd5e1" text-anchor="middle">• AD / DNS: 192.168.50.10</text>
+    <text x="90" y="50" font-family="monospace" font-size="9" fill="#cbd5e1" text-anchor="middle">• ERP Srv: 192.168.50.20</text>
+    <text x="90" y="62" font-family="monospace" font-size="9" fill="#cbd5e1" text-anchor="middle">• NVR CCTV: 192.168.50.50</text>
+  </g>
+
+  <!-- ================= ZONE 3: CORPORATE OFFICE ================= -->
+  <g transform="translate(40, 330)" filter="url(#shadow)">
+    <!-- Office Switch Box -->
+    <rect width="420" height="260" rx="12" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+    <rect x="0" y="0" width="420" height="40" rx="12" fill="url(#officeGrad)"/>
+    <text x="210" y="26" font-family="sans-serif" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">
+      🏢 SW-ACCESS-OFFICE (Catalyst 2960 PoE)
+    </text>
+
+    <!-- Sub-devices -->
+    <!-- VoIP Phone 101 + PC -->
+    <g transform="translate(20, 55)">
+      <rect width="180" height="85" rx="8" fill="#1e293b" stroke="#334155"/>
+      <text x="90" y="20" font-family="sans-serif" font-size="11" font-weight="bold" fill="#38bdf8" text-anchor="middle">📞 IP Phone 7960 (Ext 101)</text>
+      <text x="90" y="36" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Voice VLAN 30 (Tagged)</text>
+      <line x1="20" y1="44" x2="160" y2="44" stroke="#334155"/>
+      <text x="90" y="59" font-family="sans-serif" font-size="11" font-weight="bold" fill="#a7f3d0" text-anchor="middle">💻 Workstation PC 1</text>
+      <text x="90" y="74" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Data VLAN 20: 192.168.20.11</text>
+    </g>
+
+    <!-- VoIP Phone 102 + PC -->
+    <g transform="translate(220, 55)">
+      <rect width="180" height="85" rx="8" fill="#1e293b" stroke="#334155"/>
+      <text x="90" y="20" font-family="sans-serif" font-size="11" font-weight="bold" fill="#38bdf8" text-anchor="middle">📞 IP Phone 7960 (Ext 102)</text>
+      <text x="90" y="36" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Voice VLAN 30 (Tagged)</text>
+      <line x1="20" y1="44" x2="160" y2="44" stroke="#334155"/>
+      <text x="90" y="59" font-family="sans-serif" font-size="11" font-weight="bold" fill="#a7f3d0" text-anchor="middle">💻 Support PC 2</text>
+      <text x="90" y="74" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Data VLAN 20: 192.168.20.12</text>
+    </g>
+
+    <!-- Network Printer -->
+    <g transform="translate(20, 155)">
+      <rect width="180" height="85" rx="8" fill="#1e293b" stroke="#334155"/>
+      <text x="90" y="25" font-family="sans-serif" font-size="12" font-weight="bold" fill="#fde047" text-anchor="middle">🖨️ Office Laser Printer</text>
+      <text x="90" y="45" font-family="monospace" font-size="10" fill="#cbd5e1" text-anchor="middle">VLAN 25 (Printers)</text>
+      <text x="90" y="63" font-family="monospace" font-size="10" fill="#94a3b8" text-anchor="middle">IP: 192.168.25.11</text>
+    </g>
+
+    <!-- Wireless Controller & AP -->
+    <g transform="translate(220, 155)">
+      <rect width="180" height="85" rx="8" fill="#1e293b" stroke="#334155"/>
+      <text x="90" y="25" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c084fc" text-anchor="middle">📡 Cisco WLC + Corp AP</text>
+      <text x="90" y="45" font-family="monospace" font-size="10" fill="#cbd5e1" text-anchor="middle">VLAN 40 (Corp Wi-Fi)</text>
+      <text x="90" y="63" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">WLC: 192.168.40.10</text>
+    </g>
+  </g>
+
+  <!-- ================= ZONE 4: SMART FACTORY ================= -->
+  <g transform="translate(500, 330)" filter="url(#shadow)">
+    <!-- Factory Switch Box -->
+    <rect width="420" height="260" rx="12" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+    <rect x="0" y="0" width="420" height="40" rx="12" fill="url(#factoryGrad)"/>
+    <text x="210" y="26" font-family="sans-serif" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">
+      🏭 SW-ACCESS-FACTORY (Industrial PoE Switch)
+    </text>
+
+    <!-- Sub-devices -->
+    <!-- Production Smart TV -->
+    <g transform="translate(20, 55)">
+      <rect width="180" height="85" rx="8" fill="#1e293b" stroke="#334155"/>
+      <text x="90" y="22" font-family="sans-serif" font-size="12" font-weight="bold" fill="#38bdf8" text-anchor="middle">📺 Production Smart TV</text>
+      <text x="90" y="42" font-family="monospace" font-size="10" fill="#cbd5e1" text-anchor="middle">VLAN 60 (Smart TVs)</text>
+      <text x="90" y="58" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">192.168.60.11 (DHCP)</text>
+      <text x="90" y="73" font-family="sans-serif" font-size="9" fill="#64748b" text-anchor="middle">OEE &amp; Telemetry Dashboard</text>
+    </g>
+
+    <!-- Factory Floor IP Phone 103 -->
+    <g transform="translate(220, 55)">
+      <rect width="180" height="85" rx="8" fill="#1e293b" stroke="#334155"/>
+      <text x="90" y="24" font-family="sans-serif" font-size="12" font-weight="bold" fill="#fb923c" text-anchor="middle">📞 Plant Phone (Ext 103)</text>
+      <text x="90" y="44" font-family="monospace" font-size="10" fill="#cbd5e1" text-anchor="middle">Voice VLAN 30</text>
+      <text x="90" y="62" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Cisco CME PBX Managed</text>
+    </g>
+
+    <!-- CCTV Surveillance Cameras -->
+    <g transform="translate(20, 155)">
+      <rect width="180" height="85" rx="8" fill="#1e293b" stroke="#334155"/>
+      <text x="90" y="22" font-family="sans-serif" font-size="12" font-weight="bold" fill="#f87171" text-anchor="middle">📹 CCTV IP Cameras</text>
+      <text x="90" y="42" font-family="monospace" font-size="10" fill="#cbd5e1" text-anchor="middle">VLAN 70 (PoE 802.3at)</text>
+      <text x="90" y="58" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">CAM01: .11 | CAM02: .12</text>
+      <text x="90" y="73" font-family="sans-serif" font-size="9" fill="#64748b" text-anchor="middle">RTSP Stream to NVR (.50.50)</text>
+    </g>
+
+    <!-- Industrial IoT & RFID Access -->
+    <g transform="translate(220, 155)">
+      <rect width="180" height="85" rx="8" fill="#1e293b" stroke="#334155"/>
+      <text x="90" y="22" font-family="sans-serif" font-size="12" font-weight="bold" fill="#4ade80" text-anchor="middle">🚪 IoT RFID &amp; PLC Sensors</text>
+      <text x="90" y="42" font-family="monospace" font-size="10" fill="#cbd5e1" text-anchor="middle">VLAN 80 (Factory OT)</text>
+      <text x="90" y="58" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Door RFID: 192.168.80.11</text>
+      <text x="90" y="73" font-family="sans-serif" font-size="9" fill="#64748b" text-anchor="middle">Industrial SCADA Telemetry</text>
+    </g>
+  </g>
+</svg>
